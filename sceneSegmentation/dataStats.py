@@ -1,6 +1,7 @@
 import json
 import sys
 import matplotlib.pyplot as plt
+import random
 
 if __name__ == '__main__':
     MODE = sys.argv[1]
@@ -29,13 +30,26 @@ if __name__ == '__main__':
     x_axis = overall.keys()
     y_axis = overall.values()
     y_axis = [item / len(video_id.keys()) for item in y_axis]
-    print(y_axis)
     
     plt.scatter(x_axis, y_axis, label=MODE)
     plt.xlabel('Average # of Consequent Key-Frames')
     plt.ylabel('Count')
     plt.title(f'{MODE} Dataset Analysis')
     plt.savefig(f'Average_{MODE}.png')
+    plt.clf()
+
+    total_number = len(video_id.keys())
+    idx = random.randint(0, total_number)
+    idx = list(video_id.keys())[idx]
+
+    xa_axis = list(video_id[idx].keys())
+    ya_axis = list(video_id[idx].values())
+
+    plt.scatter(xa_axis, ya_axis, label=idx)
+    plt.xlabel('Average # of Consequent Key-Frames')
+    plt.ylabel('Count')
+    plt.title(f'Analysis for Video ID: {idx}')
+    plt.savefig(f'{MODE}_{idx}.png')
 
         
     
