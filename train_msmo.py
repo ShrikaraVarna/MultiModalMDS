@@ -29,6 +29,12 @@ def train_msmo(args):
     model = model.to(args.device)
     calc_contrastive_loss = Dual_Contrastive_Loss().to(args.device)
 
+    use_multi = False
+    if torch.cuda.device_count() > 1:
+        use_multi = True
+        print('Lets use', torch.cuda.device_count(), 'GPUs!')
+        model = torch.nn.DataParallel(model)
+
     parameters = [p for p in model.parameters() if p.requires_grad] + \
                     [p for p in calc_contrastive_loss.parameters() if p.requires_grad]
 
@@ -48,27 +54,37 @@ def train_msmo(args):
         dataset_name = 'BLiSSDataset'
 
     train_set = eval(dataset_name)(mode='train', args=args)
-    train_loader = torch.utils.data.DataLoader(train_set, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers, 
-                                                drop_last=False, pin_memory=True, 
+    train_data_lenth = len(train_set)
+    train_size = int(0.8 * train_data_lenth)
+
+    train_indices, val_indices = torch.utils.data.random_split(range(train_data_lenth), [train_size, train_data_lenth - train_size])
+
+
+    train_loader = torch.utils.data.DataLoader(train_set, batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers, 
+                                                drop_last=False, pin_memory=True, sampler=torch.utils.data.SubsetRandomSampler(train_indices),
                                                 worker_init_fn=worker_init_fn, collate_fn=my_collate_fn)
-    val_set = eval(dataset_name)(mode='test', args=args)
-    val_loader = torch.utils.data.DataLoader(val_set, batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers, 
-                                                drop_last=False, pin_memory=True, 
+
+    val_loader = torch.utils.data.DataLoader(train_set, batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers, 
+                                                drop_last=False, pin_memory=True, sampler=torch.utils.data.SubsetRandomSampler(val_indices),
                                                 worker_init_fn=worker_init_fn, collate_fn=my_collate_fn)
 
     checkpoint_path = None
     if args.checkpoint and args.test:
+        test_set = eval(dataset_name)(mode='test', args=args)
+        test_loader = torch.utils.data.DataLoader(test_set, batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers, 
+                                                    drop_last=False, pin_memory=True, 
+                                                    worker_init_fn=worker_init_fn, collate_fn=my_collate_fn)
         checkpoint_path = '{}/model_best_text.pt'.format(args.checkpoint)
         print(f"load checkpoint from {checkpoint_path}")
         checkpoint = torch.load(checkpoint_path, map_location='cpu')
         model.load_state_dict(checkpoint['model_state_dict'])
-        val_R1, val_R2, val_RL, _ = evaluate_msmo(model, val_loader, args, epoch=0)
+        val_R1, val_R2, val_RL, _ = evaluate_msmo(model, test_loader, args, epoch=0)
 
         checkpoint_path = '{}/model_best_video.pt'.format(args.checkpoint)
         print(f"load checkpoint from {checkpoint_path}")
         checkpoint = torch.load(checkpoint_path, map_location='cpu')
         model.load_state_dict(checkpoint['model_state_dict'])
-        _, _, _, val_cos = evaluate_msmo(model, val_loader, args, epoch=0)
+        _, _, _, val_cos = evaluate_msmo(model, test_loader, args, epoch=0)
 
         logger.info(f'R1: {val_R1:.4f} R2: {val_R2:.4f} RL: {val_RL:.4f} Cos: {val_cos:.4f}')
         return val_R1, val_R2, val_RL, val_cos, best_val_epoch, max_train_R1, max_train_R2, max_train_RL, max_train_cos
@@ -232,15 +248,15 @@ def train_msmo(args):
 
 
 @torch.no_grad()
-def evaluate_msmo(model, val_loader, args, epoch=None, mode='train'):
+def evaluate_msmo(model, test_loader, args, epoch=None, mode='train'):
     stats = AverageMeter('R1', 'R2', 'RL', 'cos')
-    data_length = len(val_loader)
+    data_length = len(test_loader)
 
     model.eval()
     for k, (video_list, video_summ_list, text_list, \
             mask_video_list, mask_video_summ_list, mask_text_list, \
             video_label_list, text_label_list, article_segment_list, highlight_list, \
-            video_to_text_mask_list, text_to_video_mask_list) in enumerate(val_loader):
+            video_to_text_mask_list, text_to_video_mask_list) in enumerate(test_loader):
 
         batch_size = len(video_list)
         

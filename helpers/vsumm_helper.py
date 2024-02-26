@@ -1,7 +1,7 @@
 from typing import Iterable, List
 
 import numpy as np
-from ortools.algorithms.pywrapknapsack_solver import KnapsackSolver
+from ortools.algorithms.python.knapsack_solver import KnapsackSolver
 
 import pdb
 

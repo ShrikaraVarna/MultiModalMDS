@@ -1,5 +1,6 @@
 import logging
 import os
+import torch
 
 from torch.utils.tensorboard import SummaryWriter
 from train_msmo import train_msmo
@@ -58,7 +59,9 @@ def main_msmo(args):
 
 
 if __name__ == '__main__':
+
     args = get_arguments()
+    args.device = 'cuda' if torch.cuda.is_available() else 'cpu'
     if args.dataset in ['Daily_Mail', 'CNN', 'BLiSS']:
         main_msmo(args)
     elif args.dataset in ['TVSum', 'SumMe']:
