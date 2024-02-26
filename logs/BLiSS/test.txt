@@ -1,0 +1,23 @@
+[2024-02-25 23:08:14,248] {'dataset': 'BLiSS', 'data_root': '../../../../data/tir/projects/tir4/users/svarna/A2Summ/data', 'device': 'cuda', 'seed': 12345, 'max_epoch': 50, 'start_epoch': 0, 'batch_size': 64, 'num_workers': 4, 'model_dir': 'logs/BLiSS', 'log_file': 'log.txt', 'lr': 0.001, 'weight_decay': 1e-07, 'nms_thresh': 0.4, 'print_freq': 5, 'eval_freq': 1, 'suffix': '', 'checkpoint': 'logs/BLiSS/exp_baseline_updated/BLiSS/checkpoint', 'test': True, 'num_input_video': 512, 'num_input_text': 768, 'num_feature': 512, 'num_hidden': 128, 'dropout_video': 0.1, 'dropout_text': 0.1, 'dropout_attn': 0.1, 'dropout_fc': 0.5, 'num_layers': 6, 'lambda_contrastive_inter': 0.01, 'lambda_contrastive_intra': 0.001, 'ratio': 4}
+[2024-02-25 23:08:16,320] Using default tokenizer.
+[2024-02-25 23:10:19,670] [Eval]  Epoch: 1/50 Iter: 5/40 R1: 0.5261 R2: 0.4182 RL: 0.5142 Cos: 0.5869
+[2024-02-25 23:10:24,022] [Eval]  Epoch: 1/50 Iter: 10/40 R1: 0.5230 R2: 0.4177 RL: 0.5117 Cos: 0.6103
+[2024-02-25 23:10:28,241] [Eval]  Epoch: 1/50 Iter: 15/40 R1: 0.5128 R2: 0.4061 RL: 0.5017 Cos: 0.6095
+[2024-02-25 23:10:32,807] [Eval]  Epoch: 1/50 Iter: 20/40 R1: 0.5113 R2: 0.4061 RL: 0.5001 Cos: 0.6194
+[2024-02-25 23:10:37,666] [Eval]  Epoch: 1/50 Iter: 25/40 R1: 0.5179 R2: 0.4122 RL: 0.5066 Cos: 0.6141
+[2024-02-25 23:10:42,061] [Eval]  Epoch: 1/50 Iter: 30/40 R1: 0.5218 R2: 0.4137 RL: 0.5106 Cos: 0.6183
+[2024-02-25 23:10:45,647] [Eval]  Epoch: 1/50 Iter: 35/40 R1: 0.5226 R2: 0.4148 RL: 0.5116 Cos: 0.6137
+[2024-02-25 23:10:48,704] [Eval]  Epoch: 1/50 Iter: 40/40 R1: 0.5234 R2: 0.4158 RL: 0.5129 Cos: 0.6146
+[2024-02-25 23:10:56,006] [Eval]  Epoch: 1/50 Iter: 5/40 R1: 0.5143 R2: 0.4037 RL: 0.5013 Cos: 0.6007
+[2024-02-25 23:11:00,513] [Eval]  Epoch: 1/50 Iter: 10/40 R1: 0.5096 R2: 0.4045 RL: 0.4975 Cos: 0.6301
+[2024-02-25 23:11:04,670] [Eval]  Epoch: 1/50 Iter: 15/40 R1: 0.4983 R2: 0.3905 RL: 0.4863 Cos: 0.6287
+[2024-02-25 23:11:09,014] [Eval]  Epoch: 1/50 Iter: 20/40 R1: 0.4980 R2: 0.3924 RL: 0.4862 Cos: 0.6391
+[2024-02-25 23:11:13,431] [Eval]  Epoch: 1/50 Iter: 25/40 R1: 0.5054 R2: 0.3986 RL: 0.4934 Cos: 0.6352
+[2024-02-25 23:11:18,196] [Eval]  Epoch: 1/50 Iter: 30/40 R1: 0.5102 R2: 0.4007 RL: 0.4985 Cos: 0.6399
+[2024-02-25 23:11:21,710] [Eval]  Epoch: 1/50 Iter: 35/40 R1: 0.5102 R2: 0.4006 RL: 0.4988 Cos: 0.6335
+[2024-02-25 23:11:24,840] [Eval]  Epoch: 1/50 Iter: 40/40 R1: 0.5115 R2: 0.4022 RL: 0.5005 Cos: 0.6337
+[2024-02-25 23:11:25,394] R1: 0.5234 R2: 0.4158 RL: 0.5129 Cos: 0.6337
+[2024-02-25 23:11:25,539] Training done. Val R1: 0.5234, R2: 0.4158, RL: 0.5129, Cos: 0.6337, Best Epoch:0.
+[2024-02-25 23:11:25,546]              Train R1: 0.0000, R2: 0.0000, RL: 0.0000, Cos: 0.0000.
+
+
